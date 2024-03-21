@@ -69,11 +69,31 @@ async function startExperiment() {
         }
         console.log(`Trial ${i + 1} response: ${response}`);
 
+        // Update the out object with trial response
+        out[`Trial ${i + 1}`] = response;
+
+        // Write the out object to a file
+        saveOutToFile(out);
+        
         // Clear the screen
         clearScreen();
     }
 
     console.log(out);
+}
+
+function saveOutToFile(out) {
+    const data = JSON.stringify(out);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'experiment_data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 function clearScreen() {
