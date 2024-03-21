@@ -5,13 +5,12 @@ const answers = [['Bill', 'John'], ['Bill', 'John'], ['Bill', 'John'], ['Bill', 
 
 function loadStims(stimDir, nStims) {
     const stims = [];
-    const aud_fs = 48000; // Assuming sample rate
     for (let i = 1; i <= nStims; i++) {
         const audioA = new Audio(stimDir + '/stim' + i + 'a.wav');
         const audioB = new Audio(stimDir + '/stim' + i + 'b.wav');
         stims.push(audioA, audioB);
     }
-    return { stims, aud_fs };
+    return stims;
 }
 
 function shuffleArray(array) {
