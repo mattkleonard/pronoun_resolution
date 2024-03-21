@@ -66,7 +66,10 @@ async function runExperiment() {
         displayText(`[1] ${ansOrder[i][0]}`);
         displayText(`[2] ${ansOrder[i][1]}`);
 
-        const response = await waitForButtonPress();
+        let response;
+        while (response !== '1' && response !== '2') {
+            response = await waitForButtonPress();
+        }
         out.resp[i] = parseInt(response);
     }
 
