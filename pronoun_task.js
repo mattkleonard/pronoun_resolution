@@ -42,6 +42,8 @@ async function startExperiment() {
         lang: getInput('Are you a native English speaker? (y/n)')
     };
 
+    const stims = loadStims(stimDir, nStims);
+
     for (let i = 0; i < nStims; i++) {
         displayText(questions[i]);
         displayText(`[1] ${answers[i][0]}`);
