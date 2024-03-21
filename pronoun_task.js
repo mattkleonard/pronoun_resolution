@@ -39,19 +39,13 @@ async function startExperiment() {
         lang: getInput('Are you a native English speaker? (y/n)')
     };
 
-    const shuffledIndices = shuffleArray(Array.from({ length: nStims }, (_, i) => i));
     const stims = loadStims(stimDir, nStims);
 
     for (let i = 0; i < nStims; i++) {
-        const index = shuffledIndices[i];
-        const question = questions[index];
-        const answer1 = answers[index][0];
-        const answer2 = answers[index][1];
-
         // Display question and answers
-        displayText(question);
-        displayText(`[1] ${answer1}`);
-        displayText(`[2] ${answer2}`);
+        displayText(questions[i]);
+        displayText(`[1] ${answers[i][0]}`);
+        displayText(`[2] ${answers[i][1]}`);
 
         let response;
         while (response !== '1' && response !== '2') {
@@ -60,10 +54,7 @@ async function startExperiment() {
         console.log(`Trial ${i + 1} response: ${response}`);
         
         // Play audio
-        await playAudioAndWait(stims[index]);
-
-        // Clear the screen
-        clearScreen();
+        await playAudioAndWait(stims[i]);
     }
 
     console.log(out);
