@@ -59,6 +59,11 @@ function waitForButtonPress() {
 
 async function startExperiment() {
     document.getElementById('startButton').addEventListener('click', async function() {
+        const out = {
+            SID: getInput('Subject initials: '),
+            lang: getInput('Are you a native English speaker? (y/n)')
+        };
+        
         for (let i = 0; i < stimsOrder.length; i++) {
             displayText(questOrder[i]);
             displayText(`[1] ${ansOrder[i][0]}`);
