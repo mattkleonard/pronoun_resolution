@@ -28,8 +28,6 @@ function getInput(prompt) {
 
 const stimDir = '/pronoun_resolution/pilot_stims';
 
-const stims = loadStims(stimDir, nStims);
-
 function displayText(text) {
     const promptDiv = document.createElement('div');
     promptDiv.textContent = text;
@@ -43,7 +41,8 @@ async function startExperiment() {
     };
 
     const stims = loadStims(stimDir, nStims);
-
+    console.log("Loaded stims:", stims);
+    
     for (let i = 0; i < nStims; i++) {
         displayText(questions[i]);
         displayText(`[1] ${answers[i][0]}`);
