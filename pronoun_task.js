@@ -42,6 +42,11 @@ async function startExperiment() {
     const stims = loadStims(stimDir, nStims);
 
     for (let i = 0; i < nStims; i++) {
+        // Play audio
+        stims[i].play().catch(error => console.error(error));
+        await new Promise(resolve => stims[i].addEventListener('ended', resolve));
+
+        // Display question and answers
         displayText(questions[i]);
         displayText(`[1] ${answers[i][0]}`);
         displayText(`[2] ${answers[i][1]}`);
@@ -51,17 +56,11 @@ async function startExperiment() {
             response = await waitForButtonPress();
         }
         console.log(`Trial ${i + 1} response: ${response}`);
-        
-        // Determine which audio file to play based on the user's response
-        const audioIndex = response === '1' ? i * 2 : i * 2 + 1;
-
-        // Play audio
-        stims[audioIndex].play().catch(error => console.error(error));
-        await new Promise(resolve => stims[audioIndex].addEventListener('ended', resolve));
     }
 
     console.log(out);
 }
+
 function waitForButtonPress() {
     return new Promise(resolve => {
         window.addEventListener('keydown', function listener(event) {
