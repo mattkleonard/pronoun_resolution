@@ -26,61 +26,30 @@ function getInput(prompt) {
     return prompt; // Mocked input, replace with actual user input function
 }
 
-// const filePath = '/path/to/file'; // Replace this with your file path
-const stimDir = '/pronoun_resolution/pilot_stims';
-
-const { stims, aud_fs } = loadStims(stimDir, nStims);
-
-const stimOrder = shuffleArray(Array.from({ length: stims.length }, (_, i) => i));
-const stimsOrder = stimOrder.map(index => stims[index]);
-const questOrder = stimOrder.map(index => questions[index]);
-const ansOrder = stimOrder.map(index => answers[index]);
-
-const out = {
-    SID: getInput('Subject initials: '),
-    lang: getInput('Are you a native English speaker? (y/n)'),
-    stimOrder: stimOrder
-};
-
-function displayText(text) {
-    const promptDiv = document.createElement('div');
-    promptDiv.textContent = text;
-    document.body.appendChild(promptDiv);
-}
-
-function waitForButtonPress() {
-    return new Promise(resolve => {
-        window.addEventListener('keydown', function listener(event) {
-            window.removeEventListener('keydown', listener);
-            resolve(event.key);
-        });
-    });
-}
-
 async function startExperiment() {
-    document.getElementById('startButton').addEventListener('click', async function() {
-        const out = {
-            SID: getInput('Subject initials: '),
-            lang: getInput('Are you a native English speaker? (y/n)')
-        };
+    const out = {
+        SID: getInput('Subject initials: '),
+        lang: getInput('Are you a native English speaker? (y/n)')
+    };
+
+    const stimDir = '/pronoun_resolution/pilot_stims';
+
+    const { stims, aud_fs } = loadStims(stimDir, nStims);
+
+    const stimOrder = shuffleArray(Array.from({ length: stims.length }, (_, i) => i));
+    const stimsOrder = stimOrder.map(index => stims[index]);
+    const questOrder = stimOrder.map(index => questions[index]);
+    const ansOrder = stimOrder.map(index => answers[index]);
+
+    for (let i = 0; i < stimsOrder.length; i++) {
+        const response = prompt(questOrder[i] + '\n[1] ' + ansOrder[i][0] + '\n[2] ' + ansOrder[i][1]);
+        // Record response
+        console.log(`Trial ${i+1} response: ${response}`);
         
-        for (let i = 0; i < stimsOrder.length; i++) {
-            displayText(questOrder[i]);
-            displayText(`[1] ${ansOrder[i][0]}`);
-            displayText(`[2] ${ansOrder[i][1]}`);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Delay for 1 second between trials
+    }
 
-            let response;
-            while (response !== '1' && response !== '2') {
-                response = await waitForButtonPress();
-            }
-            out.resp[i] = parseInt(response);
-
-            stimsOrder[i].play(); // Play audio after the user interaction
-            await new Promise(resolve => stimsOrder[i].addEventListener('ended', resolve));
-        }
-
-        console.log(out);
-    });
+    console.log(out);
 }
 
 startExperiment();
