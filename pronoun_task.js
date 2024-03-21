@@ -43,7 +43,9 @@ const out = {
 };
 
 function displayText(text) {
-    console.log(text);
+    const promptDiv = document.createElement('div');
+    promptDiv.textContent = text;
+    document.body.appendChild(promptDiv);
 }
 
 function waitForButtonPress() {
