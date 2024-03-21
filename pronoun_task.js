@@ -27,7 +27,7 @@ function getInput(prompt) {
 }
 
 // const filePath = '/path/to/file'; // Replace this with your file path
-const stimDir = 'pilot_stims';
+const stimDir = '/pronoun_resolution/pilot_stims';
 
 const { stims, aud_fs } = loadStims(stimDir, nStims);
 
