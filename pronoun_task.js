@@ -34,13 +34,17 @@ function displayText(text) {
 }
 
 async function startExperiment() {
-    const out = {};
 
-    // Ask for subject initials
-    out.SID = getInput('Subject initials: ');
+    // Display and log questions
+    displayText('Subject initials:');
+    const SID = prompt('Subject initials: ');
+    displayText('Are you a native English speaker? (y/n)');
+    const lang = prompt('Are you a native English speaker? (y/n)');
 
-    // Ask if the user is a native English speaker
-    out.lang = getInput('Are you a native English speaker? (y/n)');
+    const out = {
+        SID: SID,
+        lang: lang
+    };
     
     const stims = loadStims(stimDir, nStims);
     const shuffledIndices = shuffleArray(Array.from({ length: nStims }, (_, i) => i));
