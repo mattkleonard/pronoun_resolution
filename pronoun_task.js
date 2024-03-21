@@ -55,7 +55,7 @@ function waitForButtonPress() {
     });
 }
 
-(async function() {
+document.getElementById('startButton').addEventListener('click', async function() {
     for (let i = 0; i < stimsOrder.length; i++) {
         stimsOrder[i].play();
         await new Promise(resolve => stimsOrder[i].addEventListener('ended', resolve));
@@ -69,4 +69,4 @@ function waitForButtonPress() {
     }
 
     console.log(out);
-})();
+});
