@@ -26,30 +26,50 @@ function getInput(prompt) {
     return prompt; // Mocked input, replace with actual user input function
 }
 
+const stimDir = '/pronoun_resolution/pilot_stims';
+
+const stims = loadStims(stimDir, nStims);
+
+function displayText(text) {
+    const promptDiv = document.createElement('div');
+    promptDiv.textContent = text;
+    document.body.appendChild(promptDiv);
+}
+
 async function startExperiment() {
     const out = {
         SID: getInput('Subject initials: '),
         lang: getInput('Are you a native English speaker? (y/n)')
     };
 
-    const stimDir = '/pronoun_resolution/pilot_stims';
+    for (let i = 0; i < nStims; i++) {
+        displayText(questions[i]);
+        displayText(`[1] ${answers[i][0]}`);
+        displayText(`[2] ${answers[i][1]}`);
 
-    const { stims, aud_fs } = loadStims(stimDir, nStims);
-
-    const stimOrder = shuffleArray(Array.from({ length: stims.length }, (_, i) => i));
-    const stimsOrder = stimOrder.map(index => stims[index]);
-    const questOrder = stimOrder.map(index => questions[index]);
-    const ansOrder = stimOrder.map(index => answers[index]);
-
-    for (let i = 0; i < stimsOrder.length; i++) {
-        const response = prompt(questOrder[i] + '\n[1] ' + ansOrder[i][0] + '\n[2] ' + ansOrder[i][1]);
-        // Record response
-        console.log(`Trial ${i+1} response: ${response}`);
+        let response;
+        while (response !== '1' && response !== '2') {
+            response = await waitForButtonPress();
+        }
+        console.log(`Trial ${i + 1} response: ${response}`);
         
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Delay for 1 second between trials
+        // Play audio
+        stims[i * 2].play();
+        await new Promise(resolve => stims[i * 2].addEventListener('ended', resolve));
+        stims[i * 2 + 1].play();
+        await new Promise(resolve => stims[i * 2 + 1].addEventListener('ended', resolve));
     }
 
     console.log(out);
+}
+
+function waitForButtonPress() {
+    return new Promise(resolve => {
+        window.addEventListener('keydown', function listener(event) {
+            window.removeEventListener('keydown', listener);
+            resolve(event.key);
+        });
+    });
 }
 
 startExperiment();
