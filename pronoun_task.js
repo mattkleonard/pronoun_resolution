@@ -41,8 +41,7 @@ async function startExperiment() {
     };
 
     const stims = loadStims(stimDir, nStims);
-    console.log("Loaded stims:", stims);
-    
+
     for (let i = 0; i < nStims; i++) {
         displayText(questions[i]);
         displayText(`[1] ${answers[i][0]}`);
@@ -55,9 +54,9 @@ async function startExperiment() {
         console.log(`Trial ${i + 1} response: ${response}`);
         
         // Play audio
-        stims[i * 2].play();
+        stims[i * 2].play().catch(error => console.error(error));
         await new Promise(resolve => stims[i * 2].addEventListener('ended', resolve));
-        stims[i * 2 + 1].play();
+        stims[i * 2 + 1].play().catch(error => console.error(error));
         await new Promise(resolve => stims[i * 2 + 1].addEventListener('ended', resolve));
     }
 
@@ -72,5 +71,7 @@ function waitForButtonPress() {
         });
     });
 }
+
+document.getElementById('startButton').addEventListener('click', startExperiment);
 
 startExperiment();
