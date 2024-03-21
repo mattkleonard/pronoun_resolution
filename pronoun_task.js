@@ -57,23 +57,25 @@ function waitForButtonPress() {
     });
 }
 
-async function runExperiment() {
-    for (let i = 0; i < stimsOrder.length; i++) {
-        stimsOrder[i].play();
-        await new Promise(resolve => stimsOrder[i].addEventListener('ended', resolve));
-        
-        displayText(questOrder[i]);
-        displayText(`[1] ${ansOrder[i][0]}`);
-        displayText(`[2] ${ansOrder[i][1]}`);
+async function startExperiment() {
+    document.getElementById('startButton').addEventListener('click', async function() {
+        for (let i = 0; i < stimsOrder.length; i++) {
+            displayText(questOrder[i]);
+            displayText(`[1] ${ansOrder[i][0]}`);
+            displayText(`[2] ${ansOrder[i][1]}`);
 
-        let response;
-        while (response !== '1' && response !== '2') {
-            response = await waitForButtonPress();
+            let response;
+            while (response !== '1' && response !== '2') {
+                response = await waitForButtonPress();
+            }
+            out.resp[i] = parseInt(response);
+
+            stimsOrder[i].play(); // Play audio after the user interaction
+            await new Promise(resolve => stimsOrder[i].addEventListener('ended', resolve));
         }
-        out.resp[i] = parseInt(response);
-    }
 
-    console.log(out);
+        console.log(out);
+    });
 }
 
-runExperiment();
+startExperiment();
