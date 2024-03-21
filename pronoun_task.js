@@ -5,7 +5,7 @@ const answers = [['Bill', 'John'], ['Bill', 'John'], ['Bill', 'John'], ['Bill', 
 
 function loadStims(stimDir, nStims) {
     const stims = [];
-    const aud_fs = 44100; // Assuming sample rate
+    const aud_fs = 48000; // Assuming sample rate
     for (let i = 1; i <= nStims; i++) {
         const audioA = new Audio(stimDir + '/stim' + i + 'a.wav');
         const audioB = new Audio(stimDir + '/stim' + i + 'b.wav');
@@ -26,7 +26,7 @@ function getInput(prompt) {
     return prompt; // Mocked input, replace with actual user input function
 }
 
-const filePath = '/path/to/file'; // Replace this with your file path
+// const filePath = '/path/to/file'; // Replace this with your file path
 const stimDir = filePath + '/pilot_stims';
 
 const { stims, aud_fs } = loadStims(stimDir, nStims);
