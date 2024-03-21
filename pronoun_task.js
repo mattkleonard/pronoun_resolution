@@ -40,21 +40,30 @@ async function startExperiment() {
     };
 
     const stims = loadStims(stimDir, nStims);
+    const shuffledIndices = shuffleArray(Array.from({ length: nStims }, (_, i) => i));
 
     for (let i = 0; i < nStims; i++) {
+        const index = shuffledIndices[i];
+        const question = questions[index];
+        const answer1 = answers[index][0];
+        const answer2 = answers[index][1];
+
+        // Play audio
+        await playAudioAndWait(stims[index]);
+
         // Display question and answers
-        displayText(questions[i]);
-        displayText(`[1] ${answers[i][0]}`);
-        displayText(`[2] ${answers[i][1]}`);
+        displayText(question);
+        displayText(`[1] ${answer1}`);
+        displayText(`[2] ${answer2}`);
 
         let response;
         while (response !== '1' && response !== '2') {
             response = await waitForButtonPress();
         }
         console.log(`Trial ${i + 1} response: ${response}`);
-        
-        // Play audio
-        await playAudioAndWait(stims[i]);
+
+        // Clear the screen
+        clearScreen();
     }
 
     console.log(out);
